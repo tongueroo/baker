@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+server = ARGV[0]
+if server.nil? or server == ""
+  puts "Usage: run_recipes <server-name>"
+  puts "  rr <server-name> # short hand"
+  exit 1
+end
+RunRecipes.run(server)
