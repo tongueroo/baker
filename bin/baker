@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require File.join(File.dirname(__FILE__),'..','lib','baker')
+
+server = ARGV[0]
+if server.nil? or server == ""
+  puts "Usage: baker <server-name>"
+  exit 1
+end
+RunRecipes.run(server)

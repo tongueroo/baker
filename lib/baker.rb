@@ -29,12 +29,12 @@ class RunRecipes
   end
   def upload_chef_configs(ssh)
     log "uploading chef configs to #{@host}..."
-    if !File.exist?("config/run_recipes/dna.json") or !File.exist?("config/run_recipes/solo.rb")
-      raise "need to create a config/run_recipes/dna.json and config/run_recipes/solo.rb file, so it can be uploaded to the server that needs it"
+    if !File.exist?("config/baker/dna.json") or !File.exist?("config/baker/solo.rb")
+      raise "need to create a config/baker/dna.json and config/baker/solo.rb file, so it can be uploaded to the server that needs it"
     end
-    bash_exec("tar czf chef-config.tgz config/run_recipes")
+    bash_exec("tar czf chef-config.tgz config/baker")
     bash_exec("scp chef-config.tgz #{@host}:")
-    ssh_exec(ssh, "rm -rf chef-config && tar -zxf chef-config.tgz && mv config/run_recipes chef-config")
+    ssh_exec(ssh, "rm -rf chef-config && tar -zxf chef-config.tgz && mv config/baker chef-config")
     ssh_exec(ssh, "rm -f chef-config.tgz")
     bash_exec("rm -f chef-config.tgz")
   end
@@ -55,7 +55,9 @@ class RunRecipes
   
   def run(ssh)
     log "running chef recipes on #{@host}..."
-    ssh_exec(ssh, "chef-solo -c ~/chef-config/solo.rb -j ~/chef-config/dna.json")
+    chef_cmd = "chef-solo -c ~/chef-config/solo.rb -j ~/chef-config/dna.json"
+    log "chef_cmd : #{chef_cmd}"
+    ssh_exec(ssh, chef_cmd)
   end
   
 private

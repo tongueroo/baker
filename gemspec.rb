@@ -1,4 +1,4 @@
-GEM_NAME = 'run_recipes'
+GEM_NAME = 'baker'
 GEM_FILES = FileList['**/*'] - FileList['coverage', 'coverage/**/*', 'pkg', 'pkg/**/*']
 GEM_SPEC = Gem::Specification.new do |s|
   # == CONFIGURE ==
@@ -7,7 +7,7 @@ GEM_SPEC = Gem::Specification.new do |s|
   s.homepage = "http://github.com/tongueroo/#{GEM_NAME}"
   s.summary = "A simple way to run chef recipes"
   # == CONFIGURE ==
-  s.executables += [GEM_NAME, 'rr']
+  s.executables += [GEM_NAME]
   s.extra_rdoc_files = [ "README.markdown" ]
   s.files = GEM_FILES.to_a
   s.has_rdoc = false

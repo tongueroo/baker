@@ -7,6 +7,12 @@ Install
 -------
 
 <pre>
-sudo gem install runchef --source http://gemcutter.org
+sudo gem install baker --source http://gemcutter.org --no-ri --no-rdoc
 </pre>
 
+Usage
+-------
+
+<pre>
+baker <server>
+</pre>

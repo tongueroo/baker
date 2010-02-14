@@ -13,9 +13,10 @@ end
 
 desc "Install gem"
 task :install do
+  sudo = ENV['SUDO'].nil? ? '' : 'sudo '
   Rake::Task['gem'].invoke
-  `sudo gem uninstall #{GEM_NAME} -x`
-  `sudo gem install pkg/#{GEM_NAME}*.gem`
+  `#{sudo} gem uninstall #{GEM_NAME} -x`
+  `#{sudo} gem install pkg/#{GEM_NAME}*.gem`
   `rm -Rf pkg`
 end
 
