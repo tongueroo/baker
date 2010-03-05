@@ -3,21 +3,21 @@
 require 'net/ssh'
 require 'pp'
 
-class RunRecipes
+class Baker
   def self.run(host)
     new(host)
   end
   
   def initialize(host, user = nil)
     log "start running chef recipes on #{host}"
-    @debug = false
+    @debug = true
     @host = host
     @user = user
     Net::SSH.start(@host, @user) do |ssh|
       check
       upload_chef_configs(ssh)
       upload_recipes(ssh)
-      run(ssh)
+      run_chef(ssh)
     end
     log "done running chef recipes on #{host}"
   end
@@ -48,12 +48,12 @@ class RunRecipes
     bash_exec("scp recipes.tgz #{@host}:")
     # move
     ssh_exec(ssh, "rm -rf #{@recipes_path}")
-    ssh_exec(ssh, "mkdir #{@recipes_path}")
+    ssh_exec(ssh, "mkdir -p #{@recipes_path}")
     ssh_exec(ssh, "tar -zxf recipes.tgz -C #{@recipes_path}")
     bash_exec("rm recipes.tgz")
   end
   
-  def run(ssh)
+  def run_chef(ssh)
     log "running chef recipes on #{@host}..."
     chef_cmd = "chef-solo -c ~/chef-config/solo.rb -j ~/chef-config/dna.json"
     log "chef_cmd : #{chef_cmd}"
