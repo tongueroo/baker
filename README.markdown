@@ -41,8 +41,11 @@ config/baker/node.json and config/baker/solo.rb are important.  These are the co
 You need configure solo.rb to have this:
 
 solo.rb: 
+
+<pre>
 file_cache_path "/tmp/baker"
 cookbook_path "/tmp/baker/recipes/cookbooks"
+</pre>
 
 node.json will determine what recipes you'll run:
 
