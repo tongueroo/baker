@@ -25,9 +25,8 @@ First you need to be in a cookbooks project.  Here's an example of a mininum coo
 
 <pre>
 ├── config
-│    └── baker
-│        ├── node.json
-│        └── solo.rb
+│   ├── node.json
+│   └── solo.rb
 └── cookbooks
     ├── example_recipe1
     │    └── recipes
