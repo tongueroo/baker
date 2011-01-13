@@ -23,6 +23,7 @@ On the client:
 
 First you need to be in a cookbooks project.  Here's an example of a mininum cookbooks project:
 
+<pre>
 ├── config
 │    └── baker
 │        ├── node.json
@@ -34,6 +35,7 @@ First you need to be in a cookbooks project.  Here's an example of a mininum coo
     └── example_recipe2
         └── recipes
             └── default.rb
+</pre>
 
 config/baker/node.json and config/baker/solo.rb are important.  These are the configurations that get passed to the chef run that will tell it which recipes to run.  
 
