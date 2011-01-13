@@ -11,14 +11,14 @@ class Baker
     @baker = Baker.new(options)
     @baker.run
   end
-  
+
   def initialize(options)
     @host = options[:host] || raise("need to set host")
     @user = options[:user]
     @root = options[:root] || Dir.pwd
     set_logger
   end
-  
+
   def set_logger
     @logger = if File.exist?(@root+"/log")
       Logger.new(@root+"/log/baker.log")
@@ -26,7 +26,7 @@ class Baker
       Logger.new(@root+"/baker.log")
     end
   end
-  
+
   def run
     validate_cookbook_project
     log "*** start running chef recipes on #{@host}"
@@ -34,9 +34,9 @@ class Baker
       upload_recipes(ssh)
       run_chef(ssh)
     end
-    log "*** done running chef recipes on #{@host}"
+    log "*** done running chef recipes on #{@host}, check /var/log/baker-chef-server.log"
   end
-  
+
   def validate_cookbook_project
     if !File.exist?('cookbooks')
       raise NotCookbookProject.new("not in chef cookbooks project, @root is #{@root}")
@@ -63,38 +63,71 @@ class Baker
     remote_cmd(ssh, "rm -f /tmp/baker/recipes.tgz")
     local_cmd("rm -f /tmp/recipes.tgz")
   end
-  
+
   def run_chef(ssh)
     log "*** running chef recipes on #{@host}..."
     chef_cmd = "chef-solo -c /tmp/baker/recipes/config/solo.rb -j /tmp/baker/recipes/config/dna.json > /var/log/baker-chef-server.log 2>&1"
     log "CHEF_CMD : #{chef_cmd}"
     remote_cmd(ssh, chef_cmd)
   end
-  
-private
-  def log(msg)
-    puts(msg)
-    @logger.info(msg)
-  end
-  
-  def local_cmd(command)
-    puts "local cmd: #{command}"
-    `#{command}`
-  end
-  def remote_cmd(ssh, command)
-    puts "remote cmd: #{command}"
-    stdout = ""
-    ssh.exec!(command) do |channel, stream, data|
-      stdout << data if stream == :stdout
-    end
-    output = stdout
 
-    if output
-      output = output.split("\n").join("\n  ")
-      puts "remote output: #{output}"
+  private
+    def log(msg)
+      puts(msg)
+      @logger.info(msg)
     end
 
-    output
-  end
+    def local_cmd(command)
+      puts "local cmd: #{command}"
+      `#{command}`
+    end
+    
+    def remote_cmd(ssh, command)
+      puts "remote cmd: #{command}"
+      stdout = ""
+      ssh.exec!(command) do |channel, stream, data|
+        stdout << data if stream == :stdout
+      end
+      output = stdout
+    
+      if output
+        output = output.split("\n").join("\n  ")
+        puts "remote output: #{output}"
+      end
+    
+      output
+    end
+
+    # TODO: mess with this later so try to catch the stderr when chef-solo run fails
+    # def remote_cmd(ssh, command)
+    #   puts "remote cmd: #{command}"
+    #   ssh.open_channel do |channel| 
+    #     channel.exec(command) do |ch, success|
+    #       unless success
+    #         abort "FAILED: couldn't execute command (ssh.channel.exec failure) #{command}"
+    #       end
+    #       # stdout
+    #       channel.on_data do |ch, data|  # stdout
+    #         print data
+    #       end
+    #       # stderr
+    #       channel.on_extended_data do |ch, type, data|
+    #         next unless type == 1  # only handle stderr
+    #         $stderr.print data
+    #       end
+    #       channel.on_request("exit-status") do |ch, data|
+    #         exit_code = data.read_long
+    #         if exit_code > 0
+    #           puts "ERROR: exit code #{exit_code}"
+    #         else
+    #           puts "success"
+    #         end
+    #       end
+    #       channel.on_request("exit-signal") do |ch, data|
+    #         puts "SIGNAL: #{data.read_long}"
+    #       end
+    #     end
+    #   end
+    # end
+    
 end
-
