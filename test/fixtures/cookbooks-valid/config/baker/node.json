@@ -1,0 +1,16 @@
+{
+  "ec2": false,
+  "user":"root",
+  "packages":[],
+  "gems":[],
+  "users":[],
+  "environment": {"name":"staging"},
+  "packages":{},
+  "gems_to_install":[
+    {"name": "sinatra", "version": "0.9.4"}
+  ],
+  "recipes":[
+    "example_recipe1", 
+    "example_recipe1"
+  ]
+}

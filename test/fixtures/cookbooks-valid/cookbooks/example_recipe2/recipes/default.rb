@@ -1,0 +1,1 @@
+Chef::Log.info("example recipe 2 ran")
