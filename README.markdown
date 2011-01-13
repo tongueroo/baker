@@ -55,5 +55,5 @@ Once all that is set up, you can run baker and that will upload the recipes to t
 Errors are logged to /var/log/baker-chef-server.log and /var/log/baker-chef-client.log.
 
 <pre>
-baker <server>
+bake <server>
 </pre>
