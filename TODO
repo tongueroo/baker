@@ -1,28 +1,2 @@
 * if there is an error on the server chef-solo run, how can I notify bake command on the client.
 * uploading baker-client.log to server after done or on at_exit, take logger from ey-cap
-
-# 
-def execute
-  command = "#{@opts[:chef_bin]} -j /etc/chef/dna.json -c #{chef_config} -r \"#{@recipes_url}\" > #{@chef_log} 2>&1"
-  @logger.debug "Running: #{command}"
-  if system(command)
-    @logger.info "Running telinit"
-    system("telinit q")
-    @logger.info "Finished #{@name} chef run"
-  else
-    @logger.error("#{@name} chef run failed. Reporting error")
-    raise DeployError, "#{@name} chef run failed"
-  end
-ensure
-  if File.exists?(@chef_log)
-    FileUtils.ln_sf(@chef_log, "/var/log/chef.#{@name}.log")
-  end
-end
-
-##################################################################
-
-      @enzyme_log = Logger.new("/var/log/enzyme.log")
-      @stderr_log = Logger.new($stderr)
-
-      @stderr_log.send(level, message)
-      @enzyme_log.send(level, message)
