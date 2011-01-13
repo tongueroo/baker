@@ -36,7 +36,7 @@ First you need to be in a cookbooks project.  Here's an example of a mininum coo
             └── default.rb
 </pre>
 
-config/baker/node.json and config/baker/solo.rb are important.  These are the configurations that get passed to the chef run that will tell it which recipes to run.  
+config/node.json and config/solo.rb are important.  These are the configurations that get passed to the chef run that will tell it which recipes to run.  
 
 You need configure solo.rb to have this:
 
@@ -49,8 +49,11 @@ cookbook_path "/tmp/baker/recipes/cookbooks"
 
 node.json will determine what recipes you'll run:
 
-config/baker/node.json:
+config/node.json: 
 
+Example:
+
+https://github.com/tongueroo/baker/blob/master/test/fixtures/cookbooks-valid/config/node.json
 
 Usage
 -------
@@ -59,5 +62,5 @@ Once all that is set up, you can run baker and that will upload the recipes to t
 Errors are logged to /var/log/baker-chef-server.log and /var/log/baker-chef-client.log.
 
 <pre>
-bake <server>
+bake [server]
 </pre>
