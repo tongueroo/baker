@@ -59,7 +59,7 @@ Usage
 -------
 
 Once all that is set up, you can run baker and that will upload the recipes to the server and run them.
-Errors are logged to /var/log/baker-chef-server.log and /var/log/baker-chef-client.log.
+Errors are logged to /var/log/baker.chef.log on the server and baker.log locally.
 
 <pre>
 bake [server]

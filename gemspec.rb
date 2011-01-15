@@ -1,3 +1,5 @@
+require File.expand_path("../lib/baker", __FILE__)
+
 GEM_NAME = 'baker'
 GEM_FILES = FileList['**/*'] - FileList['coverage', 'coverage/**/*', 'pkg', 'pkg/**/*']
 GEM_SPEC = Gem::Specification.new do |s|
@@ -14,5 +16,5 @@ GEM_SPEC = Gem::Specification.new do |s|
   s.name = GEM_NAME
   s.platform = Gem::Platform::RUBY
   s.require_path = "lib"
-  s.version = "0.1.1"
+  s.version = Baker::Version
 end

@@ -2,31 +2,46 @@
 
 require 'rubygems'
 require 'net/ssh'
+require 'net/sftp'
 require 'pp'
 
-class NotCookbookProject < RuntimeError; end
+require File.expand_path('../cli', __FILE__)
 
 class Baker
+  Version = "0.1.2"
+
+  class NotCookbookProject < RuntimeError; end
+
+  def self.setup(options)
+    @baker = Baker.new(options)
+    @baker.setup
+  end
   def self.run(options)
     @baker = Baker.new(options)
     @baker.run
   end
 
   def initialize(options)
-    @host = options[:host] || raise("need to set host")
-    @user = options[:user]
-    @root = options[:root] || Dir.pwd
-    set_logger
+    @user   = nil
+    @host   = options[:host] || raise("need to set host")
+    @root   = Dir.pwd
+    @logger = Logger.new(File.exist?("#{@root}/log") ? "#{@root}/log/baker.log" : "#{@root}/baker.log")
   end
-
-  def set_logger
-    @logger = if File.exist?(@root+"/log")
-      Logger.new(@root+"/log/baker.log")
-    else
-      Logger.new(@root+"/baker.log")
+  
+  def setup
+    log "*** setting up chef"
+    Net::SFTP.start(@host, @user) do |sftp|
+      sftp.upload!(
+        File.expand_path("../../setup/baker_setup.sh", __FILE__), 
+        "/tmp/baker_setup.sh"
+      )
     end
+    Net::SSH.start(@host, @user) do |ssh|
+      remote_cmd(ssh, "bash -ex /tmp/baker_setup.sh >> /var/log/baker.setup.log 2>&1;") # 
+    end
+    log "*** done setting up chef, check /var/log/baker.setup.log on #{@host} for possible errors."
   end
-
+  
   def run
     validate_cookbook_project
     log "*** start running chef recipes on #{@host}"
@@ -34,7 +49,7 @@ class Baker
       upload_recipes(ssh)
       run_chef(ssh)
     end
-    log "*** done running chef recipes on #{@host}, check /var/log/baker-chef-server.log"
+    log "*** done running chef recipes, check /var/log/baker.chef.log on #{@host}"
   end
 
   def validate_cookbook_project
@@ -44,8 +59,9 @@ class Baker
   end
 
   def upload_recipes(ssh)
-    if !File.exist?("config/dna.json") or !File.exist?("config/solo.rb")
-      raise "need to create a config/dna.json and config/solo.rb file, so it can be uploaded to the server that needs it"
+    configs = %w{config/dna.json config/solo.rb}
+    if configs.find{|x| !File.exist?(x) }
+      raise "Need to create #{configs.join(', ')} files, it's required for chef to run."
     end
 
     log "*** uploading chef recipes to #{@host}..."
@@ -66,7 +82,7 @@ class Baker
 
   def run_chef(ssh)
     log "*** running chef recipes on #{@host}..."
-    chef_cmd = "chef-solo -c /tmp/baker/recipes/config/solo.rb -j /tmp/baker/recipes/config/dna.json > /var/log/baker-chef-server.log 2>&1"
+    chef_cmd = "chef-solo -c /tmp/baker/recipes/config/solo.rb -j /tmp/baker/recipes/config/dna.json > /var/log/baker.chef.log 2>&1"
     log "CHEF_CMD : #{chef_cmd}"
     remote_cmd(ssh, chef_cmd)
   end

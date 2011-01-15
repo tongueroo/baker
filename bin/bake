@@ -1,10 +1,4 @@
 #!/usr/bin/env ruby
 
 require File.join(File.expand_path('../../lib/baker', __FILE__))
-
-server = ARGV[0]
-if server.nil? or server == ""
-  puts "Usage: baker <server-name>"
-  exit 1
-end
-Baker.run(:host => server)
+Baker::CLI.run(ARGV)
