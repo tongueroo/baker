@@ -13,7 +13,7 @@ gem install baker --source http://gemcutter.org --no-ri --no-rdoc # sudo if you 
 Usage
 -------
 
-1. setup ssh key
+I. setup ssh key
 
 Set up your ssh key on the server so you can login into the box without a password.  The gem only supports logging in via a .ssh/config shortcut.  Your .ssh/config should look something like this:
 
@@ -22,7 +22,7 @@ Host server_name
   Port         22  
   User         root
 
-2. install chef
+II. install chef
 
 Can install chef with baker itself.  
 
@@ -30,7 +30,7 @@ Can install chef with baker itself.
 $ bake --setup server_name
 </pre>
 
-3. run chef recipes
+III. run chef recipes
 
 Create a cookbooks project.  Here's an example of a cookbooks project structure:
 
