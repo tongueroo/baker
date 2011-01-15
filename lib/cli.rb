@@ -51,8 +51,7 @@ class Baker
     end
 
     def run
-      puts "%%%%%%"
-      pp options
+      # puts "%%% options #{options.inspect}"
       if options[:setup]
         Baker.setup(options)
       else

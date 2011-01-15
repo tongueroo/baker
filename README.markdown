@@ -10,18 +10,29 @@ Install
 gem install baker --source http://gemcutter.org --no-ri --no-rdoc # sudo if you need to
 </pre>
 
-Prerequisite
+Usage
 -------
 
-You need to set up sshkeys on the server so you can ssh into the box without passwords.
+1. setup ssh key
 
-On the server:
+Set up your ssh key on the server so you can login into the box without a password.  The gem only supports logging in via a .ssh/config shortcut.  Your .ssh/config should look something like this:
 
-You'll need to make sure to have chef installed.
+Host server_name
+  Hostname     xxx.xxx.xxx.xxx
+  Port         22  
+  User         root
 
-On the client:
+2. install chef
 
-First you need to be in a cookbooks project.  Here's an example of a mininum cookbooks project:
+Can install chef with baker itself.  
+
+<pre>
+$ bake --setup server_name
+</pre>
+
+3. run chef recipes
+
+Create a cookbooks project.  Here's an example of a cookbooks project structure:
 
 <pre>
 ├── config
@@ -38,29 +49,39 @@ First you need to be in a cookbooks project.  Here's an example of a mininum coo
 
 config/node.json and config/solo.rb are important.  These are the configurations that get passed to the chef run that will tell it which recipes to run.  
 
-You need configure solo.rb to have this:
-
-solo.rb: 
+config/solo.rb looks like this: 
 
 <pre>
 file_cache_path "/tmp/baker"
 cookbook_path "/tmp/baker/recipes/cookbooks"
 </pre>
 
-node.json will determine what recipes you'll run:
-
-config/node.json: 
-
-Example:
-
-https://github.com/tongueroo/baker/blob/master/test/fixtures/cookbooks-valid/config/node.json
-
-Usage
--------
-
-Once all that is set up, you can run baker and that will upload the recipes to the server and run them.
-Errors are logged to /var/log/baker.chef.log on the server and baker.log locally.
+config/node.json looks like this:
 
 <pre>
-bake [server]
+{
+  "ec2": false,
+  "user":"root",
+  "packages":[],
+  "gems":[],
+  "users":[],
+  "environment": {"name":"staging"},
+  "packages":{},
+  "gems_to_install":[
+    {"name": "sinatra", "version": "0.9.4"}
+  ],
+  "recipes":[
+    "example_recipe1", 
+    "example_recipe1"
+  ]
+}
 </pre>
+
+To actually run the chef recipes, cd into the cookbooks project folder and run this command:
+
+<pre>
+$ bake server_name
+</pre>
+
+After chef is ran on the server you should check the /var/log/baker.chef.log for possible errors.
+
