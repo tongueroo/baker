@@ -1,4 +1,4 @@
-# TODO: upload config files: dna.json and solo.rb
+# TODO: upload config files: node.json and solo.rb
 
 require 'rubygems'
 require 'net/ssh'
@@ -59,7 +59,7 @@ class Baker
   end
 
   def upload_recipes(ssh)
-    configs = %w{config/dna.json config/solo.rb}
+    configs = %w{config/node.json config/solo.rb}
     if configs.find{|x| !File.exist?(x) }
       raise "Need to create #{configs.join(', ')} files, it's required for chef to run."
     end
@@ -82,7 +82,7 @@ class Baker
 
   def run_chef(ssh)
     log "*** running chef recipes on #{@host}..."
-    chef_cmd = "chef-solo -c /tmp/baker/recipes/config/solo.rb -j /tmp/baker/recipes/config/dna.json > /var/log/baker.chef.log 2>&1"
+    chef_cmd = "chef-solo -c /tmp/baker/recipes/config/solo.rb -j /tmp/baker/recipes/config/node.json > /var/log/baker.chef.log 2>&1"
     log "CHEF_CMD : #{chef_cmd}"
     remote_cmd(ssh, chef_cmd)
   end
