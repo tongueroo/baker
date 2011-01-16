@@ -34,7 +34,9 @@ $ bake --setup server_name
 
 III. run chef recipes
 
-Create a cookbooks project.  Here's an example of a cookbooks project structure:
+Create a cookbooks project.  Here's an example of a cookbooks project that can be used to install rails: https://github.com/tongueroo/cookbooks-rails
+
+The cookbooks project structure looks like the following:
 
 <pre>
 ├── config
