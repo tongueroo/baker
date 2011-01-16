@@ -17,10 +17,12 @@ I. setup ssh key
 
 Set up your ssh key on the server so you can login into the box without a password.  The gem only supports logging in via a .ssh/config shortcut.  Your .ssh/config should look something like this:
 
+<pre>
 Host server_name
   Hostname     xxx.xxx.xxx.xxx
   Port         22  
   User         root
+</pre>
 
 II. install chef
 
