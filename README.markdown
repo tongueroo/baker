@@ -24,9 +24,9 @@ Host server_name
   User         root
 </pre>
 
-II. install chef
+II. install chef on the server
 
-Can install chef with baker itself.  
+Can install chef on the server by using baker.
 
 <pre>
 $ bake --setup server_name
