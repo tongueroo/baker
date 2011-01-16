@@ -60,19 +60,20 @@ config/node.json looks like this:
 
 <pre>
 {
-  "ec2": false,
-  "user":"root",
-  "packages":[],
-  "gems":[],
-  "users":[],
-  "environment": {"name":"staging"},
-  "packages":{},
-  "gems_to_install":[
-    {"name": "sinatra", "version": "0.9.4"}
+  "ec2": true,
+  "environment": {"name":"production"},
+  "mysql_root_password":"whatever",
+  "packages":[
+    {"name": "git-core"},
+    {"name": "curl"}
+  ],
+  "gems":[
+  	{"name": "rails", "version": "3.0.3"},
+    {"name": "bundler"}
   ],
   "recipes":[
-    "example_recipe1", 
-    "example_recipe1"
+    "example_recipe1",
+    "example_recipe2"
   ]
 }
 </pre>

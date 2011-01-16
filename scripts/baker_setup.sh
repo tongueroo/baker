@@ -9,6 +9,7 @@ type -P make &>/dev/null || {
 
 # install ruby
 type -P ruby &>/dev/null || { 
+  apt-get update
   apt-get -q -y install ruby1.8 ruby1.8-dev libopenssl-ruby
   ln -s /usr/bin/ruby1.8 /usr/bin/ruby
 }
