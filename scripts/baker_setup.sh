@@ -20,9 +20,12 @@ type -P gem &>/dev/null || {
   cd rubygems-1.4.2 && ruby setup.rb
   ln -s /usr/bin/gem1.8 /usr/bin/gem
   gem update --system
+  rm -rf rubygems-1.4.2
+  rm -f rubygems-1.4.2.tgz
 }
 
 # install chef-solo
 type -P chef-solo &>/dev/null || {
   gem install --no-ri --no-rdoc chef
 }
+

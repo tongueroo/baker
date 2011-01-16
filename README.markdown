@@ -83,5 +83,5 @@ To actually run the chef recipes, cd into the cookbooks project folder and run t
 $ bake server_name
 </pre>
 
-After chef is ran on the server you should check the /var/log/baker.chef.log for possible errors.
+After running chef you should check the /var/log/baker.chef.log on the server itself for possible errors.
 

@@ -32,7 +32,7 @@ class Baker
     log "*** setting up chef"
     Net::SFTP.start(@host, @user) do |sftp|
       sftp.upload!(
-        File.expand_path("../../setup/baker_setup.sh", __FILE__), 
+        File.expand_path("../../scripts/baker_setup.sh", __FILE__), 
         "/tmp/baker_setup.sh"
       )
     end
